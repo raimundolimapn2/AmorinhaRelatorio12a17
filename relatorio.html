@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Desempenho - Amorinha Sorvetes e Açaí</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #2878BF 0%, #1e5a96 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header-text h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+
+        .period {
+            font-size: 0.95em;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #2878BF;
+        }
+
+        .hero h2 {
+            color: #2878BF;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.05em;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #2878BF;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .kpi-card.success {
+            border-top-color: #27ae60;
+        }
+
+        .kpi-card.warning {
+            border-top-color: #f39c12;
+        }
+
+        .kpi-card.info {
+            border-top-color: #3498db;
+        }
+
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #2878BF;
+            margin-bottom: 8px;
+        }
+
+        .kpi-card.success .kpi-value {
+            color: #27ae60;
+        }
+
+        .kpi-card.warning .kpi-value {
+            color: #f39c12;
+        }
+
+        .kpi-card.info .kpi-value {
+            color: #3498db;
+        }
+
+        .kpi-label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* SECTION */
+        section {
+            margin-bottom: 60px;
+        }
+
+        section h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2878BF;
+            display: inline-block;
+        }
+
+        section h3 {
+            color: #2878BF;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        /* CHARTS CONTAINER */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .chart-container h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15em;
+        }
+
+        .chart-inner {
+            position: relative;
+            height: 300px;
+        }
+
+        /* INSIGHTS */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .insight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-left: 4px solid #2878BF;
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .insight-card h4 {
+            color: #2878BF;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .insight-card p {
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        /* RECOMMENDATIONS */
+        .recommendation {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .recommendation.high {
+            border-left-color: #e74c3c;
+        }
+
+        .recommendation.medium {
+            border-left-color: #f39c12;
+        }
+
+        .recommendation.low {
+            border-left-color: #27ae60;
+        }
+
+        .rec-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rec-priority {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .recommendation.high .rec-priority {
+            background-color: #e74c3c;
+        }
+
+        .recommendation.medium .rec-priority {
+            background-color: #f39c12;
+        }
+
+        .recommendation.low .rec-priority {
+            background-color: #27ae60;
+        }
+
+        .rec-title {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .rec-content {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        .rec-action {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            font-weight: 500;
+            color: #2878BF;
+        }
+
+        .rec-impact {
+            color: #27ae60;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #2878BF 0%, #1e5a96 100%);
+            color: white;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        table td {
+            padding: 14px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge.best {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge.alert {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* DEMOGRAPHIC INFO */
+        .demographic-info {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+
+        .demo-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .demo-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .demo-label {
+            font-weight: 700;
+            color: #2878BF;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .demo-value {
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .progress-bar {
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #2878BF, #3498db);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* GEOGRAPHIC */
+        .geo-table {
+            width: 100%;
+        }
+
+        .geo-region {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            font-size: 0.9em;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 0;
+            }
+
+            .logo-img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .header-text h1 {
+                font-size: 2em;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero h2 {
+                font-size: 1.5em;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            section h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-value {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero, section, .recommendation, .insight-card, .kpi-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-brand">
+                <svg class="logo-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background circle -->
+                    <circle cx="100" cy="100" r="98" fill="white" stroke="#3d2645" stroke-width="8"/>
+                    
+                    <!-- Decorative dots -->
+                    <circle cx="50" cy="50" r="8" fill="#e67e22"/>
+                    <circle cx="150" cy="50" r="8" fill="#e67e22"/>
+                    <circle cx="160" cy="100" r="8" fill="#e67e22"/>
+                    <circle cx="150" cy="150" r="8" fill="#e67e22"/>
+                    <circle cx="100" cy="160" r="8" fill="#e67e22"/>
+                    <circle cx="50" cy="150" r="8" fill="#e67e22"/>
+                    <circle cx="40" cy="100" r="8" fill="#e67e22"/>
+                    <circle cx="50" cy="50" r="8" fill="#e67e22"/>
+                    
+                    <!-- Blackberry -->
+                    <g transform="translate(100, 70)">
+                        <!-- Stem -->
+                        <line x1="0" y1="-10" x2="-8" y2="-20" stroke="#27ae60" stroke-width="2"/>
+                        <line x1="0" y1="-10" x2="8" y2="-20" stroke="#27ae60" stroke-width="2"/>
+                        <!-- Berries -->
+                        <circle cx="-8" cy="0" r="6" fill="#5a3d7a"/>
+                        <circle cx="0" cy="0" r="6" fill="#7a4fa0"/>
+                        <circle cx="8" cy="0" r="6" fill="#5a3d7a"/>
+                        <circle cx="-14" cy="10" r="6" fill="#7a4fa0"/>
+                        <circle cx="-6" cy="10" r="6" fill="#5a3d7a"/>
+                        <circle cx="6" cy="10" r="6" fill="#7a4fa0"/>
+                        <circle cx="14" cy="10" r="6" fill="#5a3d7a"/>
+                        <circle cx="-10" cy="20" r="6" fill="#5a3d7a"/>
+                        <circle cx="2" cy="20" r="6" fill="#7a4fa0"/>
+                        <circle cx="10" cy="20" r="6" fill="#5a3d7a"/>
+                    </g>
+                </svg>
+                <div class="header-text">
+                    <h1>📊 Análise de Desempenho</h1>
+                </div>
+            </div>
+            <p>Amorinha Sorvetes e Açaí</p>
+            <p class="period">Meta Ads • 12 a 17 de junho de 2026</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <h2>Resumo Executivo</h2>
+                <p>
+                    No período analisado, a campanha de Meta Ads entregou <strong>desempenho consistente</strong> com 
+                    <strong>132.420 impressões</strong> e <strong>69.900 pessoas alcançadas</strong>, sustentados por 
+                    investimento de <strong>R$ 814,45</strong>. A audiência está bem segmentada (82% mulheres, faixa 25-34 anos predominante) 
+                    e concentrada em mobile. <span style="color: #e74c3c; font-weight: 600;">Identificou-se oportunidade crítica:</span> 
+                    uma campanha de tráfego opera com CTR 76% abaixo da média da conta. Realocando verba para criativos com melhor tração 
+                    e otimizando para o horário de pico (15h-21h), projeta-se <strong>aumento de 25-35% na eficiência</strong>.
+                </p>
+            </section>
+
+            <!-- KPI GRID -->
+            <section>
+                <h2>KPIs Principais</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value">R$ 814,45</div>
+                        <div class="kpi-label">Investimento Total</div>
+                    </div>
+                    <div class="kpi-card success">
+                        <div class="kpi-value">132.420</div>
+                        <div class="kpi-label">Impressões</div>
+                    </div>
+                    <div class="kpi-card info">
+                        <div class="kpi-value">69.900</div>
+                        <div class="kpi-label">Alcance Total</div>
+                    </div>
+                    <div class="kpi-card warning">
+                        <div class="kpi-value">0,98%</div>
+                        <div class="kpi-label">CTR Médio</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">R$ 0,63</div>
+                        <div class="kpi-label">CPC Médio</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">R$ 6,15</div>
+                        <div class="kpi-label">CPM Médio</div>
+                    </div>
+                    <div class="kpi-card success">
+                        <div class="kpi-value">1.294</div>
+                        <div class="kpi-label">Total de Cliques</div>
+                    </div>
+                    <div class="kpi-card info">
+                        <div class="kpi-value">50</div>
+                        <div class="kpi-label">Leads Gerados</div>
+                    </div>
+                    <div class="kpi-card success">
+                        <div class="kpi-value">84</div>
+                        <div class="kpi-label">Conversas Iniciadas</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PERFORMANCE DETALHADO -->
+            <section>
+                <h2>Desempenho Detalhado</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Frequência Média</strong></td>
+                            <td>1,89</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Custo por Lead</strong></td>
+                            <td>R$ 0,33</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conversas (Instagram)</strong></td>
+                            <td>82</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conversas (Facebook)</strong></td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ANÁLISE POR CAMPANHA -->
+            <section>
+                <h2>Performance por Campanha</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campanha</th>
+                            <th>Resultado</th>
+                            <th>Métrica Principal</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>[Trafego] - Mineiros - [Loja] 29/05</strong></td>
+                            <td>147 cliques</td>
+                            <td>3,96% CTR | R$ 0,12 CPC</td>
+                            <td><span class="badge best">✓ Melhor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>[Reconhecimento] - AMR 10/06</strong></td>
+                            <td>1.064 alcance</td>
+                            <td>R$ 3,56 CPA</td>
+                            <td><span class="badge">Bom</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impulsionar - Amorinha Oficial - 13/06</strong></td>
+                            <td>106 visitas</td>
+                            <td>R$ 0,18 CPA</td>
+                            <td><span class="badge">Bom</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>[Trafego] - Mineiros - [Loja] (antiga)</strong></td>
+                            <td>43 conversões</td>
+                            <td>0,11% CTR ⚠️</td>
+                            <td><span class="badge alert">⚠️ Crítico</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- GRÁFICOS -->
+            <section>
+                <h2>Análise Visual</h2>
+                
+                <div class="charts-grid">
+                    <!-- Gráfico de Performance por Hora -->
+                    <div class="chart-container">
+                        <h3>📈 Impressões por Hora</h3>
+                        <div class="chart-inner">
+                            <canvas id="horasChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Distribuição Geográfica -->
+                    <div class="chart-container">
+                        <h3>📍 Distribuição Geográfica</h3>
+                        <div class="chart-inner">
+                            <canvas id="geoChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Público por Idade -->
+                    <div class="chart-container">
+                        <h3>👥 Público por Faixa Etária</h3>
+                        <div class="chart-inner">
+                            <canvas id="idadeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico CTR por Campanha -->
+                    <div class="chart-container">
+                        <h3>🎯 CTR Comparativo (Campanhas)</h3>
+                        <div class="chart-inner">
+                            <canvas id="ctrChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEMOGRAPHIC INFO -->
+                <div class="demographic-info">
+                    <h3>📊 Análise Demográfica Detalhada</h3>
+                    
+                    <div class="demo-item">
+                        <div class="demo-label">Gênero</div>
+                        <div class="demo-value">
+                            Mulheres: 83.248 impressões (62,8%) | Homens: 49.172 impressões (37,2%)
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 62.8%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-item">
+                        <div class="demo-label">Faixa Etária Principal: 25-34 anos</div>
+                        <div class="demo-value">
+                            48.470 impressões (36,6% do total) - Principal segmento alvo
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 36.6%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-item">
+                        <div class="demo-label">Faixa Etária Secundária: 18-24 anos</div>
+                        <div class="demo-value">
+                            40.049 impressões (30,2% do total) - Público jovem e engajado
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30.2%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-item">
+                        <div class="demo-label">Horário de Pico: 15h - 21h</div>
+                        <div class="demo-value">
+                            42% das impressões totais concentradas neste período (55.617 impressões)
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 42%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DISTRIBUIÇÃO GEOGRÁFICA -->
+                <table class="geo-table">
+                    <thead>
+                        <tr>
+                            <th>Região</th>
+                            <th>Alcance</th>
+                            <th>Impressões</th>
+                            <th>Investimento</th>
+                            <th>CPM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="geo-region">🟢 Goiás</td>
+                            <td><strong>27.467</strong></td>
+                            <td>51.842</td>
+                            <td>R$ 304,64</td>
+                            <td>R$ 5,88</td>
+                        </tr>
+                        <tr>
+                            <td class="geo-region">🟢 Minas Gerais</td>
+                            <td><strong>24.508</strong></td>
+                            <td>52.241</td>
+                            <td>R$ 338,23</td>
+                            <td>R$ 6,47</td>
+                        </tr>
+                        <tr>
+                            <td class="geo-region">🟢 Mato Grosso do Sul</td>
+                            <td><strong>16.600</strong></td>
+                            <td>24.575</td>
+                            <td>R$ 146,41</td>
+                            <td>R$ 5,96</td>
+                        </tr>
+                        <tr>
+                            <td class="geo-region">🟡 Mato Grosso</td>
+                            <td><strong>2.271</strong></td>
+                            <td>3.761</td>
+                            <td>R$ 25,17</td>
+                            <td>R$ 6,69</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- INSIGHTS -->
+            <section>
+                <h2>Insights Principais</h2>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h4>🎯 Desempenho Desigual</h4>
+                        <p>Campanha '[Trafego] - Mineiros - [Loja] 29/05' opera com CTR 76% abaixo da média (0,11% vs 0,98%). Apesar do alto volume de impressões, baixo CTR indica criativos inadequados.</p>
+                    </div>
+
+                    <div class="insight-card">
+                        <h4>📱 Mobile é Dominante</h4>
+                        <p>100% do alcance vem de aplicativos móveis. Todos os ajustes devem otimizar para mobile: primeiros 2 segundos críticos, verticais preferidas, copy direto.</p>
+                    </div>
+
+                    <div class="insight-card">
+                        <h4>👩 Segmentação Forte</h4>
+                        <p>Base fortemente concentrada em mulheres 25-34 anos (62,8% do público). Segmento bem definido que responde bem a campanhas. Oportunidade de criar variações específicas.</p>
+                    </div>
+
+                    <div class="insight-card">
+                        <h4>⏰ Janela de Ouro</h4>
+                        <p>Entre 15h-21h concentram-se 42% das impressões totais. Testes de criativo devem priorizar este horário para melhor aproveitamento do leilão de anúncios.</p>
+                    </div>
+
+                    <div class="insight-card">
+                        <h4>🚀 Melhor Performer</h4>
+                        <p>Campanha '[Trafego] - Mineiros' com 3,96% CTR e R$ 0,12 CPC é a estrela. Combina volume (147 cliques) com excelente eficiência. Modelo para escalas futuras.</p>
+                    </div>
+
+                    <div class="insight-card">
+                        <h4>💬 Instagram Dominante</h4>
+                        <p>82 das 84 conversas iniciadas vieram do Instagram. Facebook está subperformando. Realocar verba prioritariamente para Instagram nas próximas campanhas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RECOMENDAÇÕES -->
+            <section>
+                <h2>Recomendações Estratégicas</h2>
+
+                <div class="recommendation high">
+                    <div class="rec-header">
+                        <span class="rec-priority">🔴 Alta Prioridade</span>
+                        <span class="rec-title">1. Realocar Verba para Criativos com Melhor Tração</span>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-action">
+                            ✓ Ação: Reduzir investimento na campanha crítica (CTR 0,11%) e realocar para 'Post Instagram: A AMORINHA reinaugurou...' que combina R$ 0,67 CPC com 434 cliques
+                        </div>
+                        <p>A concentração de verba em criativos com baixo CTR está puxando a eficiência geral da conta para baixo. O padrão indica que o problema não é orçamento, mas alocação.</p>
+                        <div class="rec-impact">📈 Impacto esperado: +25-35% em eficiência geral de cliques</div>
+                    </div>
+                </div>
+
+                <div class="recommendation high">
+                    <div class="rec-header">
+                        <span class="rec-priority">🔴 Alta Prioridade</span>
+                        <span class="rec-title">2. Otimizar Todos Criativos para Mobile</span>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-action">
+                            ✓ Ação: Produzir criativos em formato vertical (9:16), copy visível nos primeiros 2 segundos, CTA claro. Preparar 2-3 variações de copy para testes simultâneos
+                        </div>
+                        <p>Com 100% do alcance vindo de apps, cada aspecto do criativo deve estar otimizado para essa realidade. Teste A/B de copy nos próximos 7 dias.</p>
+                        <div class="rec-impact">📈 Impacto esperado: +15-20% em CTR</div>
+                    </div>
+                </div>
+
+                <div class="recommendation medium">
+                    <div class="rec-header">
+                        <span class="rec-priority">🟠 Média Prioridade</span>
+                        <span class="rec-title">3. Segmentar Público por Perfil Específico</span>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-action">
+                            ✓ Ação: Criar conjuntos de anúncios separados para Mulheres 25-34 (foco inovação) e Mulheres 18-24 (foco lifestyle), antes de aumentar frequência
+                        </div>
+                        <p>A frequência média está em 1,89, indica espaço para escalas. Mas primeiro, criar mensagens específicas para cada segmento etário do público principal.</p>
+                        <div class="rec-impact">📈 Impacto esperado: +10-15% em conversão</div>
+                    </div>
+                </div>
+
+                <div class="recommendation medium">
+                    <div class="rec-header">
+                        <span class="rec-priority">🟠 Média Prioridade</span>
+                        <span class="rec-title">4. Concentrar Testes no Horário de Pico (15h-21h)</span>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-action">
+                            ✓ Ação: Executar 70% do orçamento de testes criativos entre 15h-21h. Usar day parting para escalas maiores apenas neste window
+                        </div>
+                        <p>O horário de pico não é apenas onde há mais volume, é onde o leilão de anúncios tem dinâmica diferente. Dados de teste melhoram quando rodados ali.</p>
+                        <div class="rec-impact">📈 Impacto esperado: +10-15% em ROI de testes</div>
+                    </div>
+                </div>
+
+                <div class="recommendation low">
+                    <div class="rec-header">
+                        <span class="rec-priority">🟢 Baixa Prioridade</span>
+                        <span class="rec-title">5. Expandir para Novos Públicos (Pós-Otimização)</span>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-action">
+                            ✓ Ação: Após otimizar criativos e público principal, testar públicos masculinos com ângulos diferentes (grupos de amigos, celebração) e novas regiões
+                        </div>
+                        <p>Expansion horizontal deve vir após vertical está otimizada. Primeira semana: corrigir criativos. Segunda semana: expandir públicos. Terceira: novos mercados.</p>
+                        <div class="rec-impact">📈 Impacto esperado: +20-30% em volume total de leads</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRÓXIMOS PASSOS -->
+            <section>
+                <h2>Plano de Ação - Próximos 7 Dias</h2>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Ação</th>
+                                <th>Owner</th>
+                                <th>KPI de Sucesso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Dias 1-2</strong></td>
+                                <td>Pausar campanha com CTR crítico; realocar 50% do orçamento</td>
+                                <td>Gestor de Anúncios</td>
+                                <td>Retenção de leads gerados</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dias 2-3</strong></td>
+                                <td>Produzir 3 variações de criativo mobile (vertical 9:16)</td>
+                                <td>Time Criativo</td>
+                                <td>3 criativos prontos para testes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dias 3-4</strong></td>
+                                <td>Lançar testes A/B de copy entre 15h-21h</td>
+                                <td>Gestor de Anúncios</td>
+                                <td>CTR > 1,2%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dias 5-7</strong></td>
+                                <td>Analisar resultados; preparar segmentação por idade</td>
+                                <td>Analyst</td>
+                                <td>Recomendações para escala</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Amorinha Sorvetes e Açaí | Relatório de Análise Meta Ads | 12 a 17 de junho de 2026</p>
+    </footer>
+
+    <script>
+        // Gráfico de Impressões por Hora
+        const ctx1 = document.getElementById('horasChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h'],
+                datasets: [{
+                    label: 'Impressões',
+                    data: [7200, 8962, 11199, 10182, 8850, 7950, 9775, 8200, 5300],
+                    backgroundColor: 'rgba(40, 120, 191, 0.8)',
+                    borderColor: '#2878BF',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#7f8c8d' },
+                        grid: { color: '#ecf0f1' }
+                    },
+                    x: { ticks: { color: '#7f8c8d' } }
+                }
+            }
+        });
+
+        // Gráfico de Distribuição Geográfica
+        const ctx2 = document.getElementById('geoChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Goiás', 'Minas Gerais', 'Mato Grosso do Sul', 'Mato Grosso'],
+                datasets: [{
+                    data: [27467, 24508, 16600, 2271],
+                    backgroundColor: [
+                        '#2878BF',
+                        '#3498db',
+                        '#5dade2',
+                        '#85c1e9'
+                    ],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#2c3e50' }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Público por Idade
+        const ctx3 = document.getElementById('idadeChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+                datasets: [{
+                    label: 'Impressões por Faixa',
+                    data: [40049, 48470, 25800, 12500, 5601],
+                    backgroundColor: 'rgba(39, 174, 96, 0.8)',
+                    borderColor: '#27ae60',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { color: '#7f8c8d' },
+                        grid: { color: '#ecf0f1' }
+                    },
+                    y: { ticks: { color: '#7f8c8d' } }
+                }
+            }
+        });
+
+        // Gráfico de CTR por Campanha
+        const ctx4 = document.getElementById('ctrChart').getContext('2d');
+        new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: [
+                    '[Trafego]\nMineiros',
+                    '[Reconhecimento]\nAMR',
+                    'Impulsionar\nAmarinha',
+                    '[Trafego]\nAntiga'
+                ],
+                datasets: [{
+                    label: 'CTR (%)',
+                    data: [3.96, 0.75, 2.79, 0.11],
+                    backgroundColor: [
+                        '#27ae60',
+                        '#3498db',
+                        '#3498db',
+                        '#e74c3c'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#7f8c8d' },
+                        grid: { color: '#ecf0f1' }
+                    },
+                    x: { ticks: { color: '#7f8c8d' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
